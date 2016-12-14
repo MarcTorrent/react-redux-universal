@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 
 import Nav from '../Nav/';
 
@@ -9,6 +10,10 @@ if (process.env.BROWSER) {
 const App = ({ children }) => {
 	return (
 		<div className='container'>
+		<Helmet
+			title="Peppereat - Daily Meal Made Simple"
+			titleTemplate="%s - Peppereat - Daily Meal Made Simple"
+			/>
 			<h1>React Redux Universal - Use it as your base project for Isomorphic Web Apps</h1>
 			<Nav />
 			{children}

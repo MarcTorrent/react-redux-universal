@@ -16,6 +16,8 @@ import ReactDOM from 'react-dom/server';
 import { createMemoryHistory, RouterContext, match } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import { trigger } from 'redial';
+import Helm from 'react-helmet'; // because we are already using helmet
 
 import configureStore from '../store/configureStore';
 import ReducerRegistry from '../store/ReducerRegistry';
@@ -90,7 +92,7 @@ if (isDeveloping) {
 
 // Render Document (include global styles)
 const renderFullPage = (html, initialState, assets) => {
-
+  const head = Helm.rewind();
   // Included are some solid resets. Feel free to add normalize etc.
   return `
     <!DOCTYPE html>
@@ -98,8 +100,11 @@ const renderFullPage = (html, initialState, assets) => {
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-         <meta name="viewport" content="width=device-width, initial-scale=1" />
-		 <link rel="stylesheet" href="build/static/style.css">
+		${head.title.toString()}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+		${head.meta.toString()}
+        ${head.link.toString()}
+		<link rel="stylesheet" href="build/static/style.css">
       </head>
       <body>
         <div id="root">${html}</div>
@@ -143,17 +148,22 @@ server.get('*', (req, res) => {
 			dispatch
 		};
 
-        // When not using redial
-		const initialState = store.getState();
-		const InitialView = (
-			<Provider store={store}>
-				<RouterContext {...renderProps} />
-			</Provider>
-		);
+		trigger('fetch', components, locals)
+		  .then(() => {
+		    const initialState = store.getState();
+		    const InitialView = (
+		      <Provider store={store}>
+		        <RouterContext {...renderProps} />
+		      </Provider>
+		    );
 
-		const html = ReactDOM.renderToString(InitialView);
-		res.status(200).send(renderFullPage(html, initialState, assets));
-
+		    const html = ReactDOM.renderToString(InitialView);
+		    res.status(200).send(renderFullPage(html, initialState, assets));
+		  })
+		  .catch(e => {
+              console.log('Error on redial');
+              console.log(e)
+          });
 	});
 });
 

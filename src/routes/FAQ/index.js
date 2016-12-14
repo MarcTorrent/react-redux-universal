@@ -18,7 +18,6 @@ export default function createRoutes(reducerRegistry) {
 							faqReducer = require('./reducer').default;
 							reducerRegistry.register({faqReducer});
 						});
-                        // TODO: hot reloading for sagas
 					}
 				}
 				cb(null, FAQ);

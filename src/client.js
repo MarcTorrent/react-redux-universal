@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import { trigger } from 'redial';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -20,6 +21,7 @@ let render = () => {
 	const configureRoutes = require('./routes/root').default;
 	const routes = configureRoutes(reducerRegistry);
 
+	const { dispatch } = store;
 	const { pathname, search, hash } = window.location;
 	const location = `${pathname}${search}${hash}`;
 	const container = document.getElementById(constants.ROOT_ELEMENT);
@@ -37,6 +39,26 @@ let render = () => {
 			container
 		);
 
+	});
+
+	// For redial use
+	browserHistory.listen(location => {
+		// Match routes based on location object:
+		match({ routes, location }, (error, redirectLocation, renderProps) => {
+			// Get array of route handler components:
+			const { components } = renderProps;
+			// Define locals to be provided to all lifecycle hooks:
+			const locals = {
+				path: renderProps.location.pathname,
+				query: renderProps.location.query,
+				params: renderProps.params,
+
+				// Allow lifecycle hooks to dispatch Redux actions:
+				dispatch,
+			};
+			// Fetch mandatory data dependencies for 2nd route change onwards:
+			trigger('fetch', components, locals);
+		});
 	});
 };
 
