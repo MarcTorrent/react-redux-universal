@@ -1,0 +1,4 @@
+#!/bin/sh
+#
+PATH="/usr/local/bin:$PATH"
+npm run validate && npm run test
