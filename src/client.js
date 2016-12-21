@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 
 import configureStore from './store/configureStore';
 import ReducerRegistry from './store/ReducerRegistry';
-import coreReducers from './reducers/';
+import coreReducers from './App/reducers/';
 import * as constants from './constants';
 
 const reducerRegistry = new ReducerRegistry(coreReducers);
@@ -18,7 +18,7 @@ let render = () => {
 	const initialState = window.INITIAL_STATE || {};
 	const store = configureStore(initialState, reducerRegistry);
 	// We need to have a root route for HMR to work.
-	const configureRoutes = require('./routes/root').default;
+	const configureRoutes = require('./routes').default;
 	const routes = configureRoutes(reducerRegistry);
 
 	const { dispatch } = store;
@@ -65,10 +65,10 @@ let render = () => {
 // Configure hot module replacement for core reducers and routes
 if (process.env.NODE_ENV !== 'production') {
 	if (module.hot) {
-		module.hot.accept('./reducers/', () => {
-			reducerRegistry.register(require('./reducers/'));
+		module.hot.accept('./App/reducers/', () => {
+			reducerRegistry.register(require('./App/reducers/'));
 		});
-		module.hot.accept('./routes/root', () => {
+		module.hot.accept('./routes', () => {
 			setTimeout(render);
 		});
 	}

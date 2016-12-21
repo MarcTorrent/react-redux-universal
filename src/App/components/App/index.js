@@ -11,8 +11,8 @@ const App = ({ children }) => {
 	return (
 		<div className='container'>
 		<Helmet
-			title="Peppereat - Daily Meal Made Simple"
-			titleTemplate="%s - Peppereat - Daily Meal Made Simple"
+			title="React Redux Universal - Base Project"
+			titleTemplate="%s - React Redux Universal - Base Project"
 			/>
 			<h1>React Redux Universal - Use it as your base project for Isomorphic Web Apps</h1>
 			<Nav />

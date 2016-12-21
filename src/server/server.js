@@ -21,7 +21,7 @@ import Helm from 'react-helmet'; // because we are already using helmet
 
 import configureStore from '../store/configureStore';
 import ReducerRegistry from '../store/ReducerRegistry';
-import coreReducers from '../reducers/';
+import coreReducers from '../App/reducers/';
 import * as constants from '../constants';
 
 // always delete BROWSER env var in order to avoid client behaviors on server side rendering
@@ -122,7 +122,7 @@ server.get('*', (req, res) => {
 
     const store = configureStore({}, reducerRegistry);
     // We need to have a root route for HMR to work.
-    const configureRoutes = require('../routes/root').default;
+    const configureRoutes = require('../routes').default;
     const routes = configureRoutes(reducerRegistry);
     const { dispatch } = store;
 	const history = createMemoryHistory(req.path);

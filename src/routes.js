@@ -1,7 +1,7 @@
 // polyfill webpack require.ensure
 if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 
-import App from '../components/App/';
+import App from './App/components/App/';
 import Home from './Home/components/Home/';
 
 export default function configureRoutes(reducerRegistry) {
