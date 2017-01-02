@@ -1,0 +1,15 @@
+{
+	"verbose": true,
+	"testPathDirs": [
+		"<rootDir>/spec/"
+	],
+	"moduleDirectories": [
+		"node_modules",
+		"src/js"
+	],
+	"scriptPreprocessor": "<rootDir>/jest-preprocessor",
+	"setupFiles": [
+		"<rootDir>/spec/support/tests-setup.js"
+	],
+	"coverageDirectory": "<rootDir>/reports/coverage"
+}
