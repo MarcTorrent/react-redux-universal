@@ -1,4 +1,3 @@
-/* eslint-disable */
 var babelJestTransformer = require('babel-jest');
 
 var transformer = babelJestTransformer.createTransformer();
