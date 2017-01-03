@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import faqs from '../../../../fixtures/faqs.json';
 import Helmet from 'react-helmet';
+import faqs from '../../../../fixtures/faqs.json';
 import { FAQ, mapStateToProps, redial } from '../../../../../src/FAQ/components/FAQ';
 
 describe('FAQ component', function() {
