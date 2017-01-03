@@ -1,6 +1,6 @@
 import { types } from './actions';
 
-export default function(state = {}, action) {
+export default function(state = { selectedFAQ: null, faqs: [] }, action) {
 	switch (action.type) {
 	case types.FAQ_REQUEST_OK:
 		return {...state, selectedFAQ: action.faq};

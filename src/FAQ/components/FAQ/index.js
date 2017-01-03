@@ -8,24 +8,23 @@ if (process.env.BROWSER) {
 	require('./faq.scss');
 }
 
-const redial = {
+export const redial = {
 	fetch: ({ dispatch }) => dispatch(loadFAQList())
 };
 
 function renderFAQS(faqs) {
-	return faqs.map( faq => <li key={faq.id}>{faq.description}</li>);
+	return faqs.map(faq => <li key={faq.id}>{faq.description}</li>);
 }
 
-const FAQ = (props) => {
+export const FAQ = (props) => {
 	return (
 		<div>
 			<Helmet
 				title="FAQ Page"
 				/>
 			<h2>FAQ Page</h2>
-            <ul>
-            {renderFAQS(props.faqs)}
-            </ul>
+			
+			<ul>{renderFAQS(props.faqs)}</ul>
 		</div>
 	);
 };
@@ -34,8 +33,8 @@ FAQ.propTypes = {
 	faqs: PropTypes.array
 };
 
-const mapSateToProps = state => {
-	return {faqs: state.faqReducer.faqs || []};
+export const mapStateToProps = state => {
+	return { faqs: state.faqReducer.faqs };
 };
 
-export default provideHooks(redial)(connect(mapSateToProps)(FAQ));
+export default provideHooks(redial)(connect(mapStateToProps)(FAQ));
