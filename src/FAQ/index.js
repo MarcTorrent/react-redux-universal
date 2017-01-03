@@ -3,7 +3,7 @@ if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 export default function createRoutes(reducerRegistry) {
 	return {
 		path: 'faq',
-		getComponents(location, cb) {
+		getComponents(nextState, cb) {
 			require.ensure([], require => {
                 // First require the main component
 				const FAQ = require('./components/FAQ/').default;
