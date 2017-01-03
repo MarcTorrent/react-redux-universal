@@ -5091,10 +5091,6 @@ redux-logger@^2.7.2:
   dependencies:
     deep-diff "0.3.4"
 
-redux-mock-store@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.2.1.tgz#630c0e2642927d1417c844d935266b501f2fc231"
-
 redux-saga@^0.12.0:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.12.1.tgz#79c9263d67486fd26a7a3d3b9df8ed65057a9fc6"
@@ -6075,10 +6071,6 @@ whatwg-encoding@^1.0.1:
 whatwg-fetch@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz#0e3684c6cb9995b43efc9df03e4c365d95fd9cc0"
-
-whatwg-fetch@^1.0.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-1.1.1.tgz#ac3c9d39f320c6dce5339969d054ef43dd333319"
 
 whatwg-fetch@>=0.10.0:
   version "2.0.1"

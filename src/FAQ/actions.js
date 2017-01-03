@@ -1,6 +1,3 @@
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
-
 const BASE_URL = 'http://localhost:5000';
 
 export const types = {
