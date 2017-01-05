@@ -10,13 +10,15 @@ export default function configureStore(initialState = {}, reducerRegistry) {
 		const createLogger = require('redux-logger');
 		middleware.push(createLogger());
 	}
-	let store = createStore(rootReducer, initialState, compose(
-		applyMiddleware(...middleware),
 
-		(process.env.NODE_ENV === 'local') &&
+	const composeEnhancers =
+		process.env.NODE_ENV !== 'production' &&
 		typeof window === 'object' &&
-		typeof window.devToolsExtension !== 'undefined' ?
-		window.devToolsExtension() : f => f
+		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+
+	const store = createStore(rootReducer, initialState, composeEnhancers(
+		applyMiddleware(...middleware)
 	));
 
 	reducerRegistry.setChangeListener((reducers) => {
