@@ -1,34 +1,38 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true,
-        "jasmine": true,
-        "commonjs": true,
-        "node": true
-    },
-    "plugins": [
-        "react"
-    ],
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
-            "jsx": true
-        },
-        "sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
-    }
+	"env": {
+		"browser": true,
+		"commonjs": true,
+		"node": true,
+		"jest": true
+	},
+	"plugins": [
+		"react"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended"
+	],
+	"parserOptions": {
+		"sourceType": "module",
+		"ecmaVersion": 7,
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true,
+			"jsx": true
+		}
+	},
+	"rules": {
+		"no-console": "off",
+		"indent": [
+			"error",
+			"tab"
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	}
 }

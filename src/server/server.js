@@ -1,7 +1,6 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-import path from 'path';
 import express from 'express';
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
@@ -17,7 +16,6 @@ import compression from 'compression';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { createMemoryHistory, RouterContext, match } from 'react-router';
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { trigger } from 'redial';
 import Helm from 'react-helmet'; // because we are already using helmet
@@ -25,7 +23,6 @@ import Helm from 'react-helmet'; // because we are already using helmet
 import configureStore from '../store/configureStore';
 import ReducerRegistry from '../store/ReducerRegistry';
 import coreReducers from '../App/reducers/';
-import * as constants from '../constants';
 
 // always delete BROWSER env var in order to avoid client behaviors on server side rendering
 delete process.env.BROWSER;
@@ -40,6 +37,8 @@ server.set('port', port);
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
 server.use(hpp());
+
+/* eslint-disable quotes */
 server.use(helmet.contentSecurityPolicy({
 	directives: {
 		defaultSrc: ["'self'"],
@@ -56,6 +55,8 @@ server.use(helmet.xssFilter());
 server.use(helmet.frameguard('deny'));
 server.use(helmet.ieNoOpen());
 server.use(helmet.noSniff());
+/* eslint-enable quotes */
+
 server.use(cookieParser());
 server.use(compression());
 
@@ -166,7 +167,7 @@ server.get('*', (req, res) => {
 		})
 		.catch(e => {
 			console.log('Error on redial');
-			console.log(e)
+			console.log(e);
 		});
 	});
 });
