@@ -3,11 +3,10 @@
 	"testPathDirs": [
 		"<rootDir>/spec/"
 	],
-	"moduleDirectories": [
-		"node_modules",
-		"src/js"
-	],
-	"scriptPreprocessor": "<rootDir>/spec/support/jest-preprocessor",
+	"moduleNameMapper": {
+		"\\.(jpg|jpeg|png|gif|svg)$": "<rootDir>/spec/support/file-mock.js",
+		"\\.(css|less|scss)$": "<rootDir>/spec/support/style-mock.js"
+	},
 	"setupFiles": [
 		"<rootDir>/spec/support/tests-setup.js"
 	],
