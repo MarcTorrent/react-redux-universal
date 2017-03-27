@@ -4,6 +4,7 @@ var DashboardPlugin = require('webpack-dashboard/plugin');
 var AssetsPlugin = require('assets-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+
 function getEnvVars() {
 	return {
 		'process.env': {
@@ -44,31 +45,31 @@ module.exports = {
 		publicPath: '/build/static/'
 	},
 	module: {
-		preLoaders: [{
-			loader: 'eslint',
+		rules: [
+			{
+			loader: 'eslint-loader',
+			//this is to make sure this runs before other loaders
+			enforce: 'pre',
 			test: /\.jsx?$/,
 			include: './src/js/**/*'
-		}],
-		loaders: [{
-			loader: 'babel',
+		}, {
+			loader: 'babel-loader',
 			test: /\.jsx?$/,
 			exclude: /(node_modules)/
 		}, {
-			loader: ExtractTextPlugin.extract('css!sass'),
+			loader: ExtractTextPlugin.extract({
+				fallback: 'sass-loader',
+				use: 'css-loader'
+			}),
 			test: /\.s?css$/,
 			exclude: /(node_modules)/
 		}, {
 			test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-			loader: 'url',
+			loader: 'url-loader',
 			query: {
 				limit: 25000,
 				name: 'static/media/[name].[hash:8].[ext]'
 			}
-		}, {
-			// JSON is not enabled by default in Webpack but both Node and Browserify
-			// allow it implicitly so we also enable it.
-			test: /\.json$/,
-			loader: 'json'
 		}]
 	},
 	plugins: [
@@ -81,7 +82,7 @@ module.exports = {
 		new webpack.NamedModulesPlugin(),
 		new webpack.DefinePlugin(getEnvVars()),
 		new DashboardPlugin(),
-		new ExtractTextPlugin('style.css')
+		new ExtractTextPlugin({filename: 'style.css'})
 	],
 	devServer: {
 		host: '0.0.0.0'

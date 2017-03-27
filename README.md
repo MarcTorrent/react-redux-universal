@@ -7,9 +7,10 @@ Boilerplate for building projects needing Isomorphic (Universal) Rendering with 
 ```bash
 git clone https://github.com/MarcTorrent/react-redux-universal
 cd react-redux-universal
-npm git-hooks
+npm git-hooks ¿?
+npm install -g nodemon
 npm install
-npm dev
+npm run dev
 
 # Open localhost:5000
 ```

@@ -29,49 +29,46 @@ module.exports = {
 		publicPath: '/build/static/'
 	},
 	module: {
-		preLoaders: [{
-			loader: 'eslint',
+		rules: [
+			{
+			loader: 'eslint-loader',
+			enforce: 'pre',
 			test: /\.jsx?$/,
 			include: './src/js/**/*'
-		}],
-		loaders: [{
-			loader: 'babel',
+		}, {
+			loader: 'babel-loader',
 			test: /\.jsx?$/,
 			exclude: /(node_modules)/
 		}, {
-			loader: ExtractTextPlugin.extract('css!sass'),
+			loader: ExtractTextPlugin.extract({
+				fallback: 'sass-loader',
+				use: 'css-loader'
+			}),
 			test: /\.s?css$/,
 			exclude: /(node_modules)/
 		}, {
 			test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-			loader: 'url',
+			loader: 'url-loader',
 			query: {
 				limit: 25000,
 				name: 'static/media/[name].[hash:8].[ext]'
 			}
-		}, {
-			// JSON is not enabled by default in Webpack but both Node and Browserify
-			// allow it implicitly so we also enable it.
-			test: /\.json$/,
-			loader: 'json'
 		}]
 	},
 
 	plugins: [
-		new webpack.optimize.OccurrenceOrderPlugin(),
 		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor_[hash].js',  2),
-		new webpack.optimize.DedupePlugin(),
 		new AssetsPlugin({filename: 'assets.json'}),
 		new webpack.optimize.UglifyJsPlugin({
+			sourceMap: true,
 			compress: {
 				unused: true,
 				dead_code: true,
-				warnings: false,
 				screw_ie8: true,
 			}
 		}),
 		new webpack.NoErrorsPlugin(),
 		new webpack.DefinePlugin(getEnvVars()),
-		new ExtractTextPlugin('style.css')
+		new ExtractTextPlugin({filename: 'style.css'})
 	]
 };

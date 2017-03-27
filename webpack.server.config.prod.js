@@ -14,7 +14,7 @@ function getEnvVars() {
 function getExternals() {
   const nodeModules = fs.readdirSync(path.resolve(__dirname, 'node_modules'));
   return nodeModules.reduce(function (ext, mod) {
-    ext[mod] = 'commonjs ' + mod;
+    ext[mod] = `commonjs ${mod}`;
     return ext;
   }, {});
 }
@@ -33,20 +33,22 @@ module.exports = {
     __dirname: true
   },
   module: {
-    loaders: [{
+    rules: [{
         test: /\.js$/,
+        //should es2015 be [es2015, {modules:false}]?
         loader: 'babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-2',
         include: path.join(__dirname, 'src')
-      }, {
-        test: /\.json$/,
-        loader: 'json-loader'
       }
     ]
   },
   plugins: [
     new webpack.BannerPlugin(
-        'require("source-map-support").install();',
-        { raw: true, entryOnly: false }
+      {
+        //not clear if this require will work
+        banner: 'require("source-map-support").install();',
+        raw: true, 
+        entryOnly: false
+      }
     ),
     new webpack.IgnorePlugin(/\.(css|less|scss|svg|png|jpe?g|png)$/),
     new webpack.DefinePlugin(getEnvVars())
