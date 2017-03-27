@@ -38,7 +38,14 @@ module.exports = {
 		}, {
 			loader: 'babel-loader',
 			test: /\.jsx?$/,
-			exclude: /(node_modules)/
+			exclude: /(node_modules)/,
+			options: {
+        		presets: [
+					['es2015', {modules: false}],
+					'react',
+					'stage-2'
+				]
+        	}
 		}, {
 			loader: ExtractTextPlugin.extract({
 				use: ['css-loader', 'sass-loader']
@@ -56,7 +63,11 @@ module.exports = {
 	},
 
 	plugins: [
-		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor_[hash].js',  2),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			filename: 'vendor_[hash].js',
+			minChunks: 2
+		}),
 		new AssetsPlugin({filename: 'assets.json'}),
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {

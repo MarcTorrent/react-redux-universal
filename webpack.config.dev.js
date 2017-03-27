@@ -55,7 +55,14 @@ module.exports = {
 		}, {
 			loader: 'babel-loader',
 			test: /\.jsx?$/,
-			exclude: /(node_modules)/
+			exclude: /(node_modules)/,
+			options: {
+        		presets: [
+					['es2015', {modules: false}],
+					'react',
+					'stage-2'
+				]
+        	},
 		}, {
 			loader: ExtractTextPlugin.extract({
 				use: ['css-loader', 'sass-loader']

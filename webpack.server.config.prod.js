@@ -35,8 +35,14 @@ module.exports = {
   module: {
     rules: [{
         test: /\.js$/,
-        //should es2015 be [es2015, {modules:false}]?
-        loader: 'babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-2',
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['es2015', {modules: false}],
+            'react',
+            'stage-2'
+          ]
+        },
         include: path.join(__dirname, 'src')
       }
     ]
