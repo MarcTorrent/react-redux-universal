@@ -34,15 +34,14 @@ module.exports = {
 			loader: 'eslint-loader',
 			enforce: 'pre',
 			test: /\.jsx?$/,
-			include: './src/js/**/*'
+			include: path.resolve(__dirname, './src/js'),
 		}, {
 			loader: 'babel-loader',
 			test: /\.jsx?$/,
 			exclude: /(node_modules)/
 		}, {
 			loader: ExtractTextPlugin.extract({
-				fallback: 'sass-loader',
-				use: 'css-loader'
+				use: ['css-loader', 'sass-loader']
 			}),
 			test: /\.s?css$/,
 			exclude: /(node_modules)/
@@ -60,7 +59,6 @@ module.exports = {
 		new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor_[hash].js',  2),
 		new AssetsPlugin({filename: 'assets.json'}),
 		new webpack.optimize.UglifyJsPlugin({
-			sourceMap: true,
 			compress: {
 				unused: true,
 				dead_code: true,

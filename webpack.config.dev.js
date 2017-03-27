@@ -51,15 +51,14 @@ module.exports = {
 			//this is to make sure this runs before other loaders
 			enforce: 'pre',
 			test: /\.jsx?$/,
-			include: './src/js/**/*'
+			include: path.resolve(__dirname, './src/js'),
 		}, {
 			loader: 'babel-loader',
 			test: /\.jsx?$/,
 			exclude: /(node_modules)/
 		}, {
 			loader: ExtractTextPlugin.extract({
-				fallback: 'sass-loader',
-				use: 'css-loader'
+				use: ['css-loader', 'sass-loader']
 			}),
 			test: /\.s?css$/,
 			exclude: /(node_modules)/
