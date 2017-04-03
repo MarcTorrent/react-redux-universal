@@ -8,18 +8,24 @@ import { Provider } from 'react-redux';
 
 import configureStore from './store/configureStore';
 import ReducerRegistry from './store/ReducerRegistry';
+import SagaRegistry from './store/SagaRegistry';
 import coreReducers from './App/reducers/';
+import mainSaga from './App/sagas/';
+import authSaga from './App/sagas/auth';
 import * as constants from './constants';
 
 const reducerRegistry = new ReducerRegistry(coreReducers);
+const sagaRegistry = new SagaRegistry(mainSaga);
 
 let render = () => {
 
 	const initialState = window.INITIAL_STATE || {};
-	const store = configureStore(initialState, reducerRegistry);
+	const store = configureStore(initialState, reducerRegistry, sagaRegistry);
+	// Now, configure the core sagas that will always be part of the core bundle
+	sagaRegistry.register({'authSaga': authSaga});
 	// We need to have a root route for HMR to work.
 	const configureRoutes = require('./routes').default;
-	const routes = configureRoutes(reducerRegistry);
+	const routes = configureRoutes(reducerRegistry, sagaRegistry);
 
 	const { dispatch } = store;
 	const { pathname, search, hash } = window.location;

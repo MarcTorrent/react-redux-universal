@@ -22,8 +22,9 @@ describe('FAQ route', function() {
 
 	it('Should get components when the route is loaded', function() {
 		const reducerRegistry = { register: sinon.spy() };
+		const sagaRegistry = { register: sinon.spy() };
 		const callback = sinon.spy();
-		const route = faqRoute(reducerRegistry);
+		const route = faqRoute(reducerRegistry, sagaRegistry);
 
 		route.getComponents(null, callback);
 		expect(reducerRegistry.register.callCount).to.equal(1);

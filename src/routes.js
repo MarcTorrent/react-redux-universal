@@ -4,7 +4,7 @@ if (typeof require.ensure !== 'function') require.ensure = (d, c) => c(require);
 import App from './App/components/App/';
 import Home from './Home/components/Home/';
 
-export default function configureRoutes(reducerRegistry) {
+export default function configureRoutes(reducerRegistry, sagaRegistry) {
 	const root = {
 		path: '/',
 		component: App,
@@ -12,7 +12,7 @@ export default function configureRoutes(reducerRegistry) {
 			require.ensure([], (require) => {
 				cb(null, [
 					require('./About').default, // no need to modify store, no reducer
-					require('./FAQ').default(reducerRegistry), // add async reducer
+					require('./FAQ').default(reducerRegistry, sagaRegistry), // add async reducer
 					require('./NotFound').default // no need to modify store, no reducer
 				]);
 			});

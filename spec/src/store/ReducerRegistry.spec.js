@@ -36,7 +36,7 @@ describe('Reducer Registry', function() {
 
 	it('Should be able to retrieve the current reducers', function() {
 		reducerRegistry = new ReducerRegistry(initialReducers);
-		
+
 		const reducers = reducerRegistry.getReducers();
 		expect(reducers).to.deep.equal(initialReducers);
 	});
@@ -114,7 +114,7 @@ describe('Reducer Registry', function() {
 
 		expect(reducerRegistry._emitChange).to.equal(null);
 		expect(reducerRegistry.setChangeListener.bind(reducerRegistry, {})).to.throw(
-			Error, 'The listener must be a valid funcion.'
+			Error, 'The listener must be a valid function.'
 		);
 	});
 

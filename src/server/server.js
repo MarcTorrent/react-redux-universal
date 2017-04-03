@@ -12,6 +12,7 @@ import hpp from 'hpp';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import compression from 'compression';
+import mongoose from 'mongoose';
 
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -20,9 +21,13 @@ import { Provider } from 'react-redux';
 import { trigger } from 'redial';
 import Helm from 'react-helmet'; // because we are already using helmet
 
+import middleware from './middleware/';
 import configureStore from '../store/configureStore';
 import ReducerRegistry from '../store/ReducerRegistry';
+import SagaRegistry from '../store/SagaRegistry';
 import coreReducers from '../App/reducers/';
+import mainSaga from '../App/sagas/';
+import authSaga from '../App/sagas/auth';
 
 // always delete BROWSER env var in order to avoid client behaviors on server side rendering
 delete process.env.BROWSER;
@@ -31,11 +36,38 @@ const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 5000;
 const server = global.server = express();
 
+// DB Setup
+const dbURI = 'mongodb://localhost/react_redux_universal';
+mongoose.Promise = global.Promise;
+mongoose.connect(dbURI);
+
+mongoose.connection.on('connected', () => {
+	console.log('Mongoose default connection open to ' + dbURI);
+});
+
+// If the connection throws an error
+mongoose.connection.on('error',function (err) {
+	console.log('Mongoose default connection error: ' + err);
+});
+
+// When the connection is disconnected
+mongoose.connection.on('disconnected', function () {
+	console.log('Mongoose default connection disconnected');
+});
+
+// If the Node process ends, close the Mongoose connection
+process.on('SIGINT', function() {
+	mongoose.connection.close(function () {
+		console.log('Mongoose default connection disconnected through app termination');
+		process.exit(0);
+	});
+});
+
 // Security
 server.disable('x-powered-by');
 server.set('port', port);
 server.use(bodyParser.urlencoded({ extended: false }));
-server.use(bodyParser.json());
+server.use(bodyParser.json({type: '*/*'}));
 server.use(hpp());
 
 /* eslint-disable quotes */
@@ -59,6 +91,9 @@ server.use(helmet.noSniff());
 
 server.use(cookieParser());
 server.use(compression());
+
+// CORS support
+server.use(middleware.cors.configure());
 
 // API
 server.use('/api/1/faq', require('./api/v1/faq'));
@@ -123,13 +158,17 @@ const renderFullPage = (html, initialState, assets) => {
 // SSR Logic
 server.get('*', (req, res) => {
 	const reducerRegistry = new ReducerRegistry(coreReducers);
-	const store = configureStore({}, reducerRegistry);
+	const sagaRegistry = new SagaRegistry(mainSaga);
+
+	const store = configureStore({}, reducerRegistry, sagaRegistry);
+	// Now, configure the core sagas that will always be part of the core bundle
+	sagaRegistry.register({'authSaga': authSaga});
 	// We need to have a root route for HMR to work.
 	const configureRoutes = require('../routes').default;
 	const routes = configureRoutes(reducerRegistry);
 	const { dispatch } = store;
 	const history = createMemoryHistory(req.path);
-	
+
 	match({ routes, history }, (err, redirectLocation, renderProps) => {
 		if (err) {
 			console.error(err);
