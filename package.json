@@ -1,7 +1,7 @@
 {
 	"name": "react-redux-universal",
 	"version": "1.0.0",
-	"description": "Boilerplate for ReactJS + Redux Universal Web Apps",
+	"description": "Boilerplate for ReactJS + Redux Universal Web Apps + Redux Saga",
 	"main": "index.js",
 	"scripts": {
 		"git-hooks": "cp ./tools/git-hooks/pre-commit ./.git/hooks/ && chmod 755 ./.git/hooks/pre-commit",
@@ -43,6 +43,7 @@
 		"express": "^4.14.0",
 		"helmet": "^3.0.0",
 		"hpp": "^0.2.1",
+    	"mongoose": "^4.7.6",
 		"isomorphic-fetch": "^2.2.1",
 		"morgan": "^1.7.0",
 		"react": "^15.3.2",

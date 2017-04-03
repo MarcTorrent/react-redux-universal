@@ -21,7 +21,7 @@ export default class ReducerRegistry {
 		}
 
 		if (typeof listener !== 'function') {
-			throw new Error('The listener must be a valid funcion.');
+			throw new Error('The listener must be a valid function.');
 		}
 
 		this._emitChange = listener;

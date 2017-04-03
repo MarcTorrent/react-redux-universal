@@ -40,7 +40,14 @@ module.exports = {
       }, {
         test: /\.json$/,
         loader: 'json-loader'
-      }
+	}, {
+		test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+		loader: 'url',
+		query: {
+			limit: 25000,
+			name: 'static/media/[name].[hash:8].[ext]'
+		}
+	}
     ]
   },
   plugins: [

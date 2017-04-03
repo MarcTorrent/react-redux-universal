@@ -1,6 +1,6 @@
 # React Redux Universal
 
-Boilerplate for building projects needing Isomorphic (Universal) Rendering with ReactJS, Redux and React-Router.
+Boilerplate for building projects needing Isomorphic (Universal) Rendering with ReactJS, Redux, Redux-Saga and React-Router.
 
 
 ### Getting started
@@ -9,21 +9,21 @@ git clone https://github.com/MarcTorrent/react-redux-universal
 cd react-redux-universal
 npm git-hooks
 npm install
-npm dev
+npm run dev
 
 # Open localhost:5000
 ```
 
 ### Running your code on Development
 ```bash
-npm dev
+npm run dev
 
 # Open localhost:5000
 ```
 
 ### Validating your syntax
 ```bash
-npm validate
+npm run lint
 ```
 
 ### Passing your tests
