@@ -24,7 +24,7 @@ describe('Configure store', function() {
 
 	const wrapperSagaMiddleware = function() {
 		return sagaMiddlewareInstance;
-	}
+	};
 
 	beforeEach(function() {
 		reducers = {

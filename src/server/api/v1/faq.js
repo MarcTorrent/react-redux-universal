@@ -1,8 +1,5 @@
-import { Router } from 'express';
-const router = new Router();
 
-
-router.get('/', (req, res) => {
+export default function faqController(req, res) {
 	res.statusCode = 200;
 	res.json([{
 		id: 1,
@@ -17,6 +14,4 @@ router.get('/', (req, res) => {
 		name: 'FAQ #3',
 		description: 'This is the description of the FAQ #3'
 	}]);
-});
-
-module.exports = router;
+}

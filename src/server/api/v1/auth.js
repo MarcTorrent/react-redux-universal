@@ -1,16 +1,23 @@
-import { Router } from 'express';
 import User from '../../models/user';
+import jwt from 'jwt-simple';
 
-const router = new Router();
+import { SECRET } from '../../services/passport';
 
+function tokenForUser(user) {
+	const timestamp = new Date().getTime();
+	return jwt.encode({ sub: user.id, iat: timestamp }, SECRET);
+}
 
-router.post('/', (req, res, next) => {
+export function signupController(req, res, next) {
 	const email = req.body.email;
-	const firstName = req.body.firstName;
-	const lastName = req.body.lastName;
+	const password = req.body.password;
+
+	if (!email || !password) {
+		res.status(422).send({error: 'You must provide an email and a password'});
+	}
 
 	// See if a user with the given email exists
-	User.findOne({email: email}, function(err, existingUser) {
+	User.findOne({ email }, function(err, existingUser) {
 		if (err) {
 			return next(err);
 		}
@@ -21,9 +28,8 @@ router.post('/', (req, res, next) => {
 		}
 		// If a user with email does NOT exist, create and save user record
 		const user = new User({
-			firstName: firstName,
-			lastName: lastName,
-			email: email
+			email,
+			password
 		});
 
 		user.save(function(err) {
@@ -33,9 +39,16 @@ router.post('/', (req, res, next) => {
 
 			// Respond to request indicating the user was created
 			res.statusCode = 201;
-			res.json({});
+			res.json({ token: tokenForUser(user)});
 		});
 	});
-});
+}
 
-module.exports = router;
+export function signinController(req, res) {
+	res.json({ token: tokenForUser(req.user) });
+}
+
+export function signoutController(req, res) {
+	// TODO: invalidate current token
+	res.json({});
+}

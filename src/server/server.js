@@ -29,6 +29,11 @@ import coreReducers from '../App/reducers/';
 import mainSaga from '../App/sagas/';
 import authSaga from '../App/sagas/auth';
 
+import ApiRoutes from './api/v1';
+
+import { AUTH_COOKIE } from '../constants';
+import { USER_AUTHENTICATED } from '../App/actions/types';
+
 // always delete BROWSER env var in order to avoid client behaviors on server side rendering
 delete process.env.BROWSER;
 
@@ -96,7 +101,7 @@ server.use(compression());
 server.use(middleware.cors.configure());
 
 // API
-server.use('/api/1/faq', require('./api/v1/faq'));
+server.use('/api/1/', ApiRoutes);
 
 // Stub for assets, in case running in dev mode.
 let assets;
@@ -165,9 +170,18 @@ server.get('*', (req, res) => {
 	sagaRegistry.register({'authSaga': authSaga});
 	// We need to have a root route for HMR to work.
 	const configureRoutes = require('../routes').default;
-	const routes = configureRoutes(reducerRegistry);
+	const routes = configureRoutes(reducerRegistry, sagaRegistry);
 	const { dispatch } = store;
 	const history = createMemoryHistory(req.path);
+
+	// TODO: Authorize based on token in cookie
+	// But it should be done though a JwtStrategy. Pending to be used, already implemented
+	const token = req.cookies[AUTH_COOKIE];
+	if (token) {
+		dispatch({
+			type: USER_AUTHENTICATED
+		});
+	}
 
 	match({ routes, history }, (err, redirectLocation, renderProps) => {
 		if (err) {
@@ -193,21 +207,21 @@ server.get('*', (req, res) => {
 		};
 
 		trigger('fetch', components, locals)
-		.then(() => {
-			const initialState = store.getState();
-			const InitialView = (
-				<Provider store={store}>
-					<RouterContext {...renderProps} />
-				</Provider>
-			);
+			.then(() => {
+				const initialState = store.getState();
+				const InitialView = (
+					<Provider store={store}>
+						<RouterContext {...renderProps} />
+					</Provider>
+				);
 
-			const html = ReactDOM.renderToString(InitialView);
-			res.status(200).send(renderFullPage(html, initialState, assets));
-		})
-		.catch(e => {
-			console.log('Error on redial');
-			console.log(e);
-		});
+				const html = ReactDOM.renderToString(InitialView);
+				res.status(200).send(renderFullPage(html, initialState, assets));
+			})
+			.catch(e => {
+				console.log('Error on redial');
+				console.log(e);
+			});
 	});
 });
 

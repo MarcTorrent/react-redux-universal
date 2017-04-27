@@ -13,6 +13,8 @@ import coreReducers from './App/reducers/';
 import mainSaga from './App/sagas/';
 import authSaga from './App/sagas/auth';
 import * as constants from './constants';
+import * as resources from './plugins/resources';
+import { USER_AUTHENTICATED } from './App/actions/types';
 
 const reducerRegistry = new ReducerRegistry(coreReducers);
 const sagaRegistry = new SagaRegistry(mainSaga);
@@ -31,6 +33,13 @@ let render = () => {
 	const { pathname, search, hash } = window.location;
 	const location = `${pathname}${search}${hash}`;
 	const container = document.getElementById(constants.ROOT_ELEMENT);
+
+	const token = resources.getCookie(constants.AUTH_COOKIE);
+	if (token) {
+		dispatch({
+			type: USER_AUTHENTICATED
+		});
+	}
 
 	// Pull child routes using match. Adjust Router for vanilla webpack HMR,
 	// in development using a new key every time there is an edit.
