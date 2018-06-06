@@ -45,8 +45,7 @@ module.exports = {
 		publicPath: '/build/static/'
 	},
 	module: {
-		rules: [
-			{
+		rules: [{
 			loader: 'eslint-loader',
 			//this is to make sure this runs before other loaders
 			enforce: 'pre',
